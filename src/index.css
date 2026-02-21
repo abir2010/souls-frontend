@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Outfit:wght@100..900&display=swap");
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-brand-primary: #0a373d; /* Logo */
+  --color-brand-accent: #c5a059; /* Gold / Brass */
+  --color-brand-muted: #f4f4f4; /* Light gray */
+
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Outfit", sans-serif;
+}
