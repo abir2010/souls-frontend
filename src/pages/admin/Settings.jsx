@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { getSettings, updateSettings } from "../../api/settingsApi";
 
 const Settings = () => {
+  // Access the query client to manage cache and invalidate queries
   const queryClient = useQueryClient();
 
+  // Fetch initial settings from the server
   const { data: initialSettings, isLoading } = useQuery({
     queryKey: ["store-settings"],
     queryFn: getSettings,
   });
 
+  // Local state to manage form inputs for settings
   const [formData, setFormData] = useState({
     shippingInsideChittagong: 80,
     shippingOutsideChittagong: 150,
@@ -19,6 +22,7 @@ const Settings = () => {
     globalDiscountPercentage: 5,
   });
 
+  // When initial settings are loaded, populate the form data with those values
   useEffect(() => {
     if (initialSettings) {
       setFormData({
@@ -34,6 +38,7 @@ const Settings = () => {
     }
   }, [initialSettings]);
 
+  // Mutation to update settings on the server
   const mutation = useMutation({
     mutationFn: updateSettings,
     onSuccess: () => {
@@ -49,11 +54,13 @@ const Settings = () => {
     },
   });
 
+  // Handle changes to form inputs and update local state
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: Number(value) }));
   };
 
+  // Handle form submission to update settings on the server
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -71,6 +78,7 @@ const Settings = () => {
     mutation.mutate(payload);
   };
 
+  // Show loading state while fetching initial settings
   if (isLoading)
     return (
       <div className="h-96 flex items-center justify-center">

@@ -4,6 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useCartStore } from "../../store/useCartStore";
 
 const Navbar = () => {
+  // State to manage mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Calculate total items in cart for the badge
@@ -110,7 +111,7 @@ const Navbar = () => {
 
       {/* --- MOBILE DRAWER UI --- */}
 
-      {/* 1. Dark Backdrop Overlay */}
+      {/* Dark Backdrop Overlay */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-50 md:hidden transition-opacity"
@@ -118,7 +119,7 @@ const Navbar = () => {
         />
       )}
 
-      {/* 2. Side Drawer */}
+      {/* Side Drawer */}
       <div
         className={`fixed top-0 right-0 h-full w-64 bg-white z-50 shadow-2xl transform transition-transform duration-300 ease-in-out md:hidden flex flex-col ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"

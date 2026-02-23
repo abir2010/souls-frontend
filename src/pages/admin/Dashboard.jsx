@@ -23,6 +23,7 @@ import {
 import { getDashboardStats } from "../../api/dashboardApi";
 
 const Dashboard = () => {
+  // State for selected time range filter
   const [timeRange, setTimeRange] = useState("7days");
 
   // Fetch real data based on the selected time range
@@ -54,6 +55,7 @@ const Dashboard = () => {
     }
   };
 
+  // Loading state with a centered spinner
   if (isLoading && !stats) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
@@ -62,6 +64,7 @@ const Dashboard = () => {
     );
   }
 
+  // Error state with a user-friendly message
   if (isError) {
     return (
       <div className="bg-red-50 p-6 rounded-xl border border-red-100 flex items-start gap-3">
@@ -92,7 +95,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in">
-      {/* 1. Page Header & Filters */}
+      {/* Page Header & Filters */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-display font-bold text-brand-primary">
@@ -114,7 +117,7 @@ const Dashboard = () => {
         </select>
       </div>
 
-      {/* 2. KPI Cards */}
+      {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {/* Total Revenue */}
         <div className="bg-white p-6 border border-gray-100 rounded-xl shadow-sm">
@@ -185,7 +188,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* 3. Charts Section */}
+      {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Revenue Area Chart */}
         <div className="bg-white p-6 border border-gray-100 rounded-xl shadow-sm lg:col-span-2">
@@ -311,7 +314,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* 4. Recent Orders Table */}
+      {/* Recent Orders Table */}
       <div className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
           <h3 className="text-lg font-bold text-brand-primary">

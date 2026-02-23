@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCartStore } from "../../store/useCartStore";
 
 const ProductCard = ({ product }) => {
+  // Access the addItem function from the cart store
   const addItem = useCartStore((state) => state.addItem);
 
   // Extract only sizes that are actually in stock
@@ -11,6 +12,7 @@ const ProductCard = ({ product }) => {
       ?.filter((variant) => variant.stock > 0)
       .map((variant) => variant.size) || [];
 
+  // Handle the quick add action
   const handleQuickAdd = (e) => {
     e.preventDefault();
     // Defaults to the first available size for the quick add

@@ -44,6 +44,7 @@ const slides = [
 ];
 
 const HeroSection = () => {
+  // Refs for custom navigation buttons
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
 
@@ -69,7 +70,7 @@ const HeroSection = () => {
         speed={800} // Transition speed in ms
         loop={true}
         autoplay={{
-          delay: 5000, // 5 seconds per slide
+          delay: 4000, // 4 seconds per slide
           disableOnInteraction: false,
         }}
         navigation={{
@@ -77,7 +78,7 @@ const HeroSection = () => {
           nextEl: navigationNextRef.current,
         }}
         pagination={{ clickable: true }}
-        // We need to re-assign refs after initialization for custom nav buttons
+        // Need to re-assign refs after initialization for custom nav buttons
         onBeforeInit={(swiper) => {
           swiper.params.navigation.prevEl = navigationPrevRef.current;
           swiper.params.navigation.nextEl = navigationNextRef.current;

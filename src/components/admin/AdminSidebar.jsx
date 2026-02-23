@@ -10,6 +10,7 @@ import {
 import { Link, NavLink } from "react-router-dom";
 
 const AdminSidebar = ({ isMobileOpen, closeMobileSidebar }) => {
+  // Define navigation links with their respective icons
   const navLinks = [
     { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
     { name: "Orders", path: "/admin/orders", icon: ShoppingBag },
@@ -18,6 +19,7 @@ const AdminSidebar = ({ isMobileOpen, closeMobileSidebar }) => {
     { name: "Settings", path: "/admin/settings", icon: Settings },
   ];
 
+  // Define active and inactive link styles
   const activeClass =
     "flex items-center gap-3 px-4 py-3 bg-brand-primary text-white rounded-md transition-colors";
   const inactiveClass =

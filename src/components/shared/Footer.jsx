@@ -9,6 +9,7 @@ import {
 import { Link } from "react-router-dom";
 
 const Footer = () => {
+  // Get the current year for the copyright notice
   const currentYear = new Date().getFullYear();
 
   return (

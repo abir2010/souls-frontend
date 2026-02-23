@@ -8,6 +8,7 @@ import ScrollToTopButton from "../components/shared/ScrollToTopButton";
 import { useCartStore } from "../store/useCartStore";
 
 const MainLayout = () => {
+  // This is the MainLayout component that wraps around all pages (Home, Shop, etc.)
   const setDiscountConfig = useCartStore((state) => state.setDiscountConfig);
 
   // Fetch the live settings from MongoDB
@@ -41,5 +42,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
-
-//  <main className="grow container mx-auto px-4 py-8"></main>

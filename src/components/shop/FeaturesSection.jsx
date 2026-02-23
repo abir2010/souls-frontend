@@ -1,5 +1,6 @@
 import { Award, RefreshCw, ShieldCheck, Truck } from "lucide-react";
 
+// Feature data for the shop features section
 const features = [
   {
     id: 1,

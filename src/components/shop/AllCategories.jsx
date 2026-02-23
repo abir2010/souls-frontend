@@ -71,7 +71,7 @@ const AllCategories = () => {
       </div>
 
       <div className="space-y-2 md:space-y-4">
-        {/* 1. Panjabi Section */}
+        {/* Panjabi Section */}
         <CategorySection
           categoryName="Premium Panjabi"
           apiCategory="Panjabi" // Must match Mongoose Enum exactly
@@ -79,7 +79,7 @@ const AllCategories = () => {
           ctaLink="/shop?category=Panjabi"
         />
 
-        {/* 2. Casual Shirts Section (Image on Right) */}
+        {/* Casual Shirts Section (Image on Right) */}
         <CategorySection
           categoryName="Casual Shirts"
           apiCategory="Shirt"
@@ -88,7 +88,7 @@ const AllCategories = () => {
           reverse={true}
         />
 
-        {/* 3. Pants Section */}
+        {/* Pants Section */}
         <CategorySection
           categoryName="Trousers & Pants"
           apiCategory="Pant"
@@ -96,7 +96,7 @@ const AllCategories = () => {
           ctaLink="/shop?category=Pant"
         />
 
-        {/* 4. T-Shirts Section (Image on Right) */}
+        {/* T-Shirts Section (Image on Right) */}
         <CategorySection
           categoryName="T-Shirts & Tees"
           apiCategory="T-Shirt" // Corrected from "Tshirt" to match your DB schema

@@ -1,59 +1,38 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
+// Admin Pages
 import AdminLayout from "./layouts/AdminLayout";
 import MainLayout from "./layouts/MainLayout";
-
-// Shop Pages
-import Checkout from "./pages/shop/Checkout";
-import Home from "./pages/shop/Home";
-import ProductDetails from "./pages/shop/ProductDetails";
-
-// Admin Pages
-import Dashboard from "./pages/admin/Dashboard";
-import Login from "./pages/admin/Login";
-import About from "./pages/shop/About";
-import Cart from "./pages/shop/Cart";
-import OurStore from "./pages/shop/OurStore";
-import Shop from "./pages/shop/Shop";
-
-import { useEffect } from "react";
-import axiosInstance from "./api/axiosInstance";
-import ProtectedRoute from "./components/admin/ProtectedRoute";
 import AddProduct from "./pages/admin/AddProduct";
 import Customers from "./pages/admin/Customers";
+import Dashboard from "./pages/admin/Dashboard";
 import EditProduct from "./pages/admin/EditProduct";
+import Login from "./pages/admin/Login";
 import Orders from "./pages/admin/Orders";
 import Products from "./pages/admin/Products";
 import Settings from "./pages/admin/Settings";
+// Info Pages
 import FAQs from "./pages/info/FAQs";
 import PrivacyPolicy from "./pages/info/PrivacyPolicy";
 import ReturnsAndExchanges from "./pages/info/ReturnsAndExchanges";
 import SizeGuide from "./pages/info/SizeGuide";
 import TermsOfService from "./pages/info/TermsOfService";
+// Shop Pages
+import ScrollToTop from "./components/shared/ScrollToTop";
+import About from "./pages/shop/About";
+import Cart from "./pages/shop/Cart";
+import Checkout from "./pages/shop/Checkout";
+import Home from "./pages/shop/Home";
 import OrderSuccess from "./pages/shop/OrderSuccess";
+import OurStore from "./pages/shop/OurStore";
+import ProductDetails from "./pages/shop/ProductDetails";
+import Shop from "./pages/shop/Shop";
 import TrackOrder from "./pages/shop/TrackOrder";
 
 function App() {
-  // A simple component to test backend connectivity on app load
-  const TestConnection = () => {
-    useEffect(() => {
-      const pingBackend = async () => {
-        try {
-          // Assuming you have a basic GET /api/products route in your backend
-          const res = await axiosInstance.get("/products");
-          console.log("Backend Connection Successful!", res.data);
-        } catch (error) {
-          console.error("Backend Connection Failed:", error.message);
-        }
-      };
-      pingBackend();
-    }, []);
-
-    return null;
-  };
-  // TestConnection(); // Call the test connection component
-
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Customer Routes */}
         <Route path="/" element={<MainLayout />}>
@@ -76,7 +55,7 @@ function App() {
         {/* ADMIN ROUTES */}
         <Route path="/admin/login" element={<Login />} />
 
-        {/* Wrap the entire admin section in the ProtectedRoute */}
+        {/* PROTECTED ROUTES */}
         <Route element={<ProtectedRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />

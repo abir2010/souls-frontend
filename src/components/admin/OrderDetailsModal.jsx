@@ -35,8 +35,10 @@ const OrderDetailsModal = ({
     }
   }, [order]);
 
+  // Don't render the modal if it's not open or if there's no order data
   if (!isOpen || !order) return null;
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdate(order._id, formData);

@@ -22,6 +22,7 @@ const CartDrawer = () => {
     getCartTotal,
   } = useCartStore();
 
+  // Calculate subtotal for the cart
   const { subTotal } = getCartTotal();
 
   // Dynamic Discount Logic
@@ -32,7 +33,7 @@ const CartDrawer = () => {
     100,
   );
 
-  // CSE Trick: Prevent the background page from scrolling when the drawer is open
+  // Prevent the background page from scrolling when the drawer is open
   useEffect(() => {
     if (isDrawerOpen) {
       document.body.style.overflow = "hidden";
@@ -46,7 +47,7 @@ const CartDrawer = () => {
 
   return (
     <>
-      {/* 1. Dark Overlay (Clicking it closes the drawer) */}
+      {/* Dark Overlay (Clicking it closes the drawer) */}
       {isDrawerOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-60 transition-opacity duration-300"
@@ -54,7 +55,7 @@ const CartDrawer = () => {
         />
       )}
 
-      {/* 2. The Sliding Drawer Panel */}
+      {/* The Sliding Drawer Panel */}
       <div
         className={`fixed top-0 right-0 h-full w-full sm:w-100 bg-white z-70 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${
           isDrawerOpen ? "translate-x-0" : "translate-x-full"

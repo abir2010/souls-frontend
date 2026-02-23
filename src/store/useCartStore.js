@@ -4,10 +4,10 @@ import { persist } from "zustand/middleware";
 export const useCartStore = create(
   persist(
     (set, get) => ({
-      // --- DATA STATE ---
+      // Sata structure for cart items
       items: [],
 
-      // Store the dynamic settings here with default fallbacks
+      // Storing the dynamic settings here with default fallbacks
       discountConfig: {
         threshold: 5000,
         percentage: 5,
@@ -103,9 +103,7 @@ export const useCartStore = create(
           0,
         );
 
-        // console.log(discountConfig);
-
-        // 5% discount if subtotal is >= ৳5000
+        // x% discount if subtotal is >= ৳y
         const discount =
           subTotal >= discountConfig.threshold
             ? Math.round(subTotal * (discountConfig.percentage / 100))
@@ -116,7 +114,7 @@ export const useCartStore = create(
         return { subTotal, discount, total };
       },
 
-      // --- UI STATE ---
+      // UI state for cart drawer
       isDrawerOpen: false,
       openDrawer: () => set({ isDrawerOpen: true }),
       closeDrawer: () => set({ isDrawerOpen: false }),

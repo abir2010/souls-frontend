@@ -12,7 +12,7 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
-        display: ["Outfit", "sans-serif"], // Great for headings
+        display: ["Outfit", "sans-serif"], // Headings
       },
     },
   },

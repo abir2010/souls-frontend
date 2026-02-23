@@ -2,8 +2,10 @@ import axios from "axios";
 // Import Auth Store to trigger the logout state
 import { useAuthStore } from "../store/useAuthStore";
 
+// Get the base URL from environment variables or default to localhost
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+// Create an Axios instance with the base URL and default headers
 const axiosInstance = axios.create({
   baseURL,
   headers: {

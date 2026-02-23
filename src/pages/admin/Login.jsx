@@ -6,9 +6,13 @@ import { loginAdmin } from "../../api/authApi";
 import { useAuthStore } from "../../store/useAuthStore";
 
 const Login = () => {
+  // React Router's navigation hook
   const navigate = useNavigate();
+
+  // Zustand auth store for managing authentication state
   const { login, isAuthenticated } = useAuthStore();
 
+  // Local state for form inputs
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -21,18 +25,20 @@ const Login = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // Handle input changes for both email and password fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // React Query mutation for logging in the admin
   const loginMutation = useMutation({
     mutationFn: loginAdmin,
     onSuccess: (data) => {
-      // 1. Save the token in Zustand (which also saves to localStorage)
+      // Save the token in Zustand (which also saves to localStorage)
       login(data.token);
 
-      // 2. Redirect to the admin dashboard
+      // Redirect to the admin dashboard
       navigate("/admin");
     },
     onError: (error) => {
@@ -40,12 +46,14 @@ const Login = () => {
     },
   });
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     loginMutation.mutate(formData);
   };
 
-  if (isAuthenticated) return null; // Prevent UI flash before redirect
+  // If already authenticated, don't render the login form (prevents UI flash before redirect)
+  if (isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

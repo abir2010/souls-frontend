@@ -1,7 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-// ... (your existing moderateReview function)
-
 /**
  * Public: Fetch approved reviews for a specific product
  * Assumes backend route: GET /api/reviews/product/:productId

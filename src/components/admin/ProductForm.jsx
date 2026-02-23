@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 
 const ProductForm = ({ initialData, onSubmit, isLoading }) => {
+  // Form state with nested structures for discount and sizes
   const [formData, setFormData] = useState({
     name: "",
     productCode: "",
@@ -43,6 +44,7 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
     }
   }, [initialData]);
 
+  // Handle changes for simple fields and checkboxes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -51,7 +53,7 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
     }));
   };
 
-  // --- Native File Upload Handling ---
+  // Native File Upload Handling
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     if (formData.images.length + files.length > 5) {
@@ -61,6 +63,7 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
     setFormData((prev) => ({ ...prev, images: [...prev.images, ...files] }));
   };
 
+  // Remove image by index (works for both new File objects and existing URL strings)
   const removeImage = (indexToRemove) => {
     setFormData((prev) => ({
       ...prev,
@@ -68,25 +71,28 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
     }));
   };
 
-  // --- Dynamic Size Handling ---
+  // Dynamic Size Handling
   const handleSizeChange = (index, field, value) => {
     const newSizes = [...formData.sizes];
     newSizes[index][field] = field === "stock" ? parseInt(value) || 0 : value;
     setFormData((prev) => ({ ...prev, sizes: newSizes }));
   };
 
+  // Add a new size entry
   const addSizeField = () =>
     setFormData((prev) => ({
       ...prev,
       sizes: [...prev.sizes, { size: "", stock: 0, sku: "" }],
     }));
+
+  // Remove a size entry by index
   const removeSizeField = (index) =>
     setFormData((prev) => ({
       ...prev,
       sizes: prev.sizes.filter((_, i) => i !== index),
     }));
 
-  // --- Packaging FormData ---
+  // Packaging FormData
   const handleSubmit = (e) => {
     e.preventDefault();
 

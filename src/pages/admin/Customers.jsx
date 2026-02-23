@@ -4,8 +4,10 @@ import { useMemo, useState } from "react";
 import { adminGetOrders } from "../../api/orderApi";
 
 const Customers = () => {
+  // Local state for search term
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Fetch all orders to aggregate customer data
   const { data: orders, isLoading } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: adminGetOrders,
@@ -57,6 +59,7 @@ const Customers = () => {
       c.phone.includes(searchTerm),
   );
 
+  // Show loader while fetching data
   if (isLoading)
     return (
       <div className="h-96 flex items-center justify-center">

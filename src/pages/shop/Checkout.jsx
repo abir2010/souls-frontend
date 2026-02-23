@@ -9,16 +9,22 @@ import {
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createOrder } from "../../api/orderApi";
+import PageTransition from "../../components/shared/PageTransition";
 import CheckoutRecommendations from "../../components/shop/CheckoutRecommendations";
 import { useCartStore } from "../../store/useCartStore";
 
 const Checkout = () => {
+  // This page is the final step in the purchase process, where customers review their order, enter shipping details, and confirm their purchase. It integrates with the cart store to fetch current cart items and totals, and uses React Query's useMutation to handle order submission to the backend.
   const navigate = useNavigate();
+
+  // Local state to track if an order has just been placed, to prevent redirecting to cart on an empty cart after successful order
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
+  // Access cart items and totals from the cart store
   const { items, getCartTotal, clearCart, discountConfig } = useCartStore();
   const { subTotal, discount } = getCartTotal();
 
+  // Redirect to cart if there are no items and an order hasn't just been placed
   useEffect(() => {
     // Only redirect to cart if the cart is empty AND an order hasn't just been placed
     if (items.length === 0 && !isOrderPlaced) {
@@ -33,7 +39,7 @@ const Checkout = () => {
     email: "",
     city: "Chittagong",
     address: "",
-    address_secondary: "", // NEW: The hidden honeypot field
+    address_secondary: "", // The hidden honeypot field
   });
 
   // Dynamic Shipping Logic based on your exact enum
@@ -43,11 +49,13 @@ const Checkout = () => {
       : discountConfig.deliveryChargeOutside;
   const totalAmount = subTotal + shippingCharge - discount;
 
+  // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Mutation for creating an order
   const orderMutation = useMutation({
     mutationFn: createOrder,
     onSuccess: (res) => {
@@ -68,6 +76,7 @@ const Checkout = () => {
     },
   });
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -103,270 +112,274 @@ const Checkout = () => {
     orderMutation.mutate(orderPayload);
   };
 
+  // If there are no items in the cart, we don't want to show the checkout form. This also prevents issues with the order summary and totals when the cart is empty. The useEffect above will handle redirecting to the cart page if there are no items and an order hasn't just been placed.
   if (items.length === 0) return null;
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
-        <div className="mb-8">
-          <Link
-            to="/cart"
-            className="text-sm text-brand-primary font-medium hover:text-brand-accent transition-colors"
-          >
-            &larr; Return to Cart
-          </Link>
-          <h1 className="text-3xl font-display font-bold text-brand-primary mt-4">
-            Checkout
-          </h1>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-10">
-          <div className="w-full lg:w-3/5 space-y-8">
-            <form
-              id="checkout-form"
-              onSubmit={handleSubmit}
-              className="space-y-8"
+    <PageTransition>
+      <div className="bg-gray-50 min-h-screen py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="mb-8">
+            <Link
+              to="/cart"
+              className="text-sm text-brand-primary font-medium hover:text-brand-accent transition-colors"
             >
-              {/* Contact Info */}
-              <div className="bg-white p-8 border border-gray-100 shadow-sm">
-                <h2 className="text-xl font-display font-bold text-brand-primary mb-6 flex items-center gap-2">
-                  <span className="bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
-                    1
-                  </span>
-                  Contact Information
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-brand-primary">
-                      Full Name *
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      required
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white"
-                      placeholder="e.g. Hasan Mahmud"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-brand-primary">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white"
-                      placeholder="017XX XXXXXX"
-                    />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-sm font-semibold text-brand-primary">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      // Enforce Gmail validation on the frontend
-                      pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-                      title="Please enter a valid @gmail.com address"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white"
-                      placeholder="hasan@gmail.com"
-                    />
-                  </div>
-                  {/* Hidden Honeypot Input for Anti-Spam Middleware */}
-                  <input
-                    type="text"
-                    name="address_secondary"
-                    value={formData.address_secondary}
-                    onChange={handleInputChange}
-                    className="hidden" // Tailwind class makes it invisible to real users
-                    tabIndex="-1" // Prevents users from accidentally tabbing into it
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
-
-              {/* Shipping Address */}
-              <div className="bg-white p-8 border border-gray-100 shadow-sm">
-                <h2 className="text-xl font-display font-bold text-brand-primary mb-6 flex items-center gap-2">
-                  <span className="bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
-                    2
-                  </span>
-                  Shipping Address
-                </h2>
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-brand-primary">
-                      City / Region *
-                    </label>
-                    <div className="relative">
-                      {/* Updated options to match exact Mongoose Enum */}
-                      <select
-                        name="city"
-                        required
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary appearance-none bg-white cursor-pointer"
-                      >
-                        <option value="Chittagong">
-                          Inside Chittagong City
-                        </option>
-                        <option value="Outside Chittagong">
-                          Outside Chittagong City
-                        </option>
-                      </select>
-                      <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold text-brand-primary">
-                      Full Address *
-                    </label>
-                    <textarea
-                      name="address"
-                      rows="3"
-                      required
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white resize-none"
-                      placeholder="House/Apartment no, Street, Area..."
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-
-              {/* Payment Method */}
-              <div className="bg-white p-8 border border-gray-100 shadow-sm">
-                <h2 className="text-xl font-display font-bold text-brand-primary mb-6 flex items-center gap-2">
-                  <span className="bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
-                    3
-                  </span>
-                  Payment Method
-                </h2>
-
-                <div className="border-2 border-brand-primary bg-brand-primary/5 p-4 flex items-start gap-4 cursor-pointer relative overflow-hidden">
-                  <div className="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest">
-                    Selected
-                  </div>
-                  <CheckCircle2 className="w-6 h-6 text-brand-primary mt-1 shrink-0" />
-                  <div>
-                    <h3 className="font-bold text-brand-primary">
-                      Cash on Delivery (COD)
-                    </h3>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Pay with cash when your order is delivered to your
-                      doorstep.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </form>
+              &larr; Return to Cart
+            </Link>
+            <h1 className="text-3xl font-display font-bold text-brand-primary mt-4">
+              Checkout
+            </h1>
           </div>
 
-          {/* RIGHT COLUMN: Order Summary */}
-          <div className="w-full lg:w-2/5">
-            <div className="bg-white p-8 border border-gray-100 shadow-sm sticky top-28">
-              <h2 className="text-xl font-display font-bold text-brand-primary mb-6 border-b border-gray-100 pb-4">
-                Order Summary
-              </h2>
-
-              <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
-                {items.map((item) => (
-                  <div
-                    key={`${item.productId}-${item.size}`}
-                    className="flex gap-4"
-                  >
-                    <div className="relative w-16 h-20 bg-gray-100 shrink-0">
-                      <img
-                        src={item.images[0]}
-                        alt={item.name}
-                        className="w-full h-full object-cover"
+          <div className="flex flex-col lg:flex-row gap-10">
+            <div className="w-full lg:w-3/5 space-y-8">
+              <form
+                id="checkout-form"
+                onSubmit={handleSubmit}
+                className="space-y-8"
+              >
+                {/* Contact Info */}
+                <div className="bg-white p-8 border border-gray-100 shadow-sm">
+                  <h2 className="text-xl font-display font-bold text-brand-primary mb-6 flex items-center gap-2">
+                    <span className="bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
+                      1
+                    </span>
+                    Contact Information
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-brand-primary">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white"
+                        placeholder="e.g. Hasan Mahmud"
                       />
-                      <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                        {item.quantity}
-                      </span>
                     </div>
-                    <div className="flex-1 text-sm">
-                      <p className="font-bold text-brand-primary line-clamp-1">
-                        {item.name}
-                      </p>
-                      <p className="text-gray-500">Size: {item.size}</p>
-                      <p className="text-brand-primary font-semibold mt-1">
-                        ৳{item.finalPrice}
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-brand-primary">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        required
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white"
+                        placeholder="017XX XXXXXX"
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-semibold text-brand-primary">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        // Enforce Gmail validation on the frontend
+                        pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                        title="Please enter a valid @gmail.com address"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white"
+                        placeholder="hasan@gmail.com"
+                      />
+                    </div>
+                    {/* Hidden Honeypot Input for Anti-Spam Middleware */}
+                    <input
+                      type="text"
+                      name="address_secondary"
+                      value={formData.address_secondary}
+                      onChange={handleInputChange}
+                      className="hidden" // Tailwind class makes it invisible to real users
+                      tabIndex="-1" // Prevents users from accidentally tabbing into it
+                      autoComplete="off"
+                    />
+                  </div>
+                </div>
+
+                {/* Shipping Address */}
+                <div className="bg-white p-8 border border-gray-100 shadow-sm">
+                  <h2 className="text-xl font-display font-bold text-brand-primary mb-6 flex items-center gap-2">
+                    <span className="bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
+                      2
+                    </span>
+                    Shipping Address
+                  </h2>
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-brand-primary">
+                        City / Region *
+                      </label>
+                      <div className="relative">
+                        {/* Updated options to match exact Mongoose Enum */}
+                        <select
+                          name="city"
+                          required
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary appearance-none bg-white cursor-pointer"
+                        >
+                          <option value="Chittagong">
+                            Inside Chittagong City
+                          </option>
+                          <option value="Outside Chittagong">
+                            Outside Chittagong City
+                          </option>
+                        </select>
+                        <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-brand-primary">
+                        Full Address *
+                      </label>
+                      <textarea
+                        name="address"
+                        rows="3"
+                        required
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-gray-200 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary bg-white resize-none"
+                        placeholder="House/Apartment no, Street, Area..."
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Method */}
+                <div className="bg-white p-8 border border-gray-100 shadow-sm">
+                  <h2 className="text-xl font-display font-bold text-brand-primary mb-6 flex items-center gap-2">
+                    <span className="bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
+                      3
+                    </span>
+                    Payment Method
+                  </h2>
+
+                  <div className="border-2 border-brand-primary bg-brand-primary/5 p-4 flex items-start gap-4 cursor-pointer relative overflow-hidden">
+                    <div className="absolute top-0 right-0 bg-brand-primary text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest">
+                      Selected
+                    </div>
+                    <CheckCircle2 className="w-6 h-6 text-brand-primary mt-1 shrink-0" />
+                    <div>
+                      <h3 className="font-bold text-brand-primary">
+                        Cash on Delivery (COD)
+                      </h3>
+                      <p className="text-sm text-gray-600 mt-1">
+                        Pay with cash when your order is delivered to your
+                        doorstep.
                       </p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </div>
+              </form>
+            </div>
 
-              <div className="space-y-4 text-sm mb-6 border-t border-gray-100 pt-6">
-                <div className="flex justify-between text-gray-600">
-                  <span>Subtotal</span>
-                  <span className="font-medium text-brand-primary">
-                    ৳{subTotal}
-                  </span>
+            {/* RIGHT COLUMN: Order Summary */}
+            <div className="w-full lg:w-2/5">
+              <div className="bg-white p-8 border border-gray-100 shadow-sm sticky top-28">
+                <h2 className="text-xl font-display font-bold text-brand-primary mb-6 border-b border-gray-100 pb-4">
+                  Order Summary
+                </h2>
+
+                <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
+                  {items.map((item) => (
+                    <div
+                      key={`${item.productId}-${item.size}`}
+                      className="flex gap-4"
+                    >
+                      <div className="relative w-16 h-20 bg-gray-100 shrink-0">
+                        <img
+                          src={item.images[0]}
+                          alt={item.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute -top-2 -right-2 bg-brand-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                          {item.quantity}
+                        </span>
+                      </div>
+                      <div className="flex-1 text-sm">
+                        <p className="font-bold text-brand-primary line-clamp-1">
+                          {item.name}
+                        </p>
+                        <p className="text-gray-500">Size: {item.size}</p>
+                        <p className="text-brand-primary font-semibold mt-1">
+                          ৳{item.finalPrice}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                {discount > 0 && (
-                  <div className="flex justify-between text-brand-accent font-medium">
-                    <span>Discount Applied</span>
-                    <span>- ৳{discount}</span>
+                <div className="space-y-4 text-sm mb-6 border-t border-gray-100 pt-6">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal</span>
+                    <span className="font-medium text-brand-primary">
+                      ৳{subTotal}
+                    </span>
                   </div>
-                )}
 
-                <div className="flex justify-between text-gray-600">
-                  <span className="flex items-center gap-1">
-                    Shipping <Truck className="w-3 h-3" />
-                  </span>
-                  <span className="font-medium text-brand-primary">
-                    ৳{shippingCharge}
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-t border-gray-100 pt-6">
-                <div className="flex justify-between items-end mb-8">
-                  <span className="text-brand-primary font-bold text-lg">
-                    Total
-                  </span>
-                  <span className="text-3xl font-display font-bold text-brand-primary">
-                    ৳{totalAmount}
-                  </span>
-                </div>
-
-                <button
-                  type="submit"
-                  form="checkout-form"
-                  disabled={orderMutation.isPending}
-                  className="w-full bg-brand-primary text-white py-4 font-semibold hover:bg-brand-accent transition-colors flex justify-center items-center gap-2 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed"
-                >
-                  {orderMutation.isPending ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" /> Processing...
-                    </>
-                  ) : (
-                    `Confirm Order - ৳${totalAmount}`
+                  {discount > 0 && (
+                    <div className="flex justify-between text-brand-accent font-medium">
+                      <span>Discount Applied</span>
+                      <span>- ৳{discount}</span>
+                    </div>
                   )}
-                </button>
 
-                <p className="text-xs text-gray-400 text-center mt-4 flex items-center justify-center gap-1">
-                  <ShieldCheck className="w-3 h-3" /> 100% Secure Checkout
-                </p>
+                  <div className="flex justify-between text-gray-600">
+                    <span className="flex items-center gap-1">
+                      Shipping <Truck className="w-3 h-3" />
+                    </span>
+                    <span className="font-medium text-brand-primary">
+                      ৳{shippingCharge}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-100 pt-6">
+                  <div className="flex justify-between items-end mb-8">
+                    <span className="text-brand-primary font-bold text-lg">
+                      Total
+                    </span>
+                    <span className="text-3xl font-display font-bold text-brand-primary">
+                      ৳{totalAmount}
+                    </span>
+                  </div>
+
+                  <button
+                    type="submit"
+                    form="checkout-form"
+                    disabled={orderMutation.isPending}
+                    className="w-full bg-brand-primary text-white py-4 font-semibold hover:bg-brand-accent transition-colors flex justify-center items-center gap-2 uppercase tracking-widest text-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {orderMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />{" "}
+                        Processing...
+                      </>
+                    ) : (
+                      `Confirm Order - ৳${totalAmount}`
+                    )}
+                  </button>
+
+                  <p className="text-xs text-gray-400 text-center mt-4 flex items-center justify-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> 100% Secure Checkout
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <CheckoutRecommendations />
       </div>
-      <CheckoutRecommendations />
-    </div>
+    </PageTransition>
   );
 };
 

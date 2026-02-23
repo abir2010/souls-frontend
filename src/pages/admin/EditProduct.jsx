@@ -5,8 +5,13 @@ import { adminManageProduct, fetchProductByCode } from "../../api/productApi";
 import ProductForm from "../../components/admin/ProductForm";
 
 const EditProduct = () => {
-  const { id: code } = useParams(); // Retrieves the productCode from the URL
+   // Retrieves the productCode from the URL
+  const { id: code } = useParams();
+
+  // React Router's navigation hook
   const navigate = useNavigate();
+
+  // React Query's client for managing cache and queries
   const queryClient = useQueryClient();
 
   // Fetch the existing product data
@@ -35,6 +40,7 @@ const EditProduct = () => {
     },
   });
 
+  // Handle loading
   if (isLoading) {
     return (
       <div className="h-[60vh] flex items-center justify-center">
@@ -43,6 +49,7 @@ const EditProduct = () => {
     );
   }
 
+  // Handle error
   if (isError) {
     return (
       <div className="p-4 text-red-500 bg-red-50 rounded-md">

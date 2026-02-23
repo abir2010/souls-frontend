@@ -23,23 +23,26 @@ const getTargetCategory = (primaryCartCategory) => {
 };
 
 const CheckoutRecommendations = () => {
+  // Access the cart items from the Zustand store
   const items = useCartStore((state) => state.items);
 
-  // 1. Identify what the user is primarily buying
-  // We look at the first item in the cart to determine the main outfit piece
+  // Identify what the user is primarily buying
+  // Looking at the first item in the cart to determine the main outfit piece
   const primaryCartCategory = items.length > 0 ? items[0].category : null;
   const targetCategory = getTargetCategory(primaryCartCategory);
 
-  // 2. Fetch recommendations for that specific target category
+  // Fetch recommendations for that specific target category
   const { data: recommendations, isLoading } = useQuery({
     queryKey: ["recommendations", targetCategory],
-    // Assuming your fetchProducts API passes filters directly to Axios params
+    // Assuming fetchProducts API passes filters directly to Axios params
     queryFn: () => fetchProducts({ category: targetCategory }),
     enabled: items.length > 0, // Only run this query if the cart isn't empty
   });
 
+  // Handle loading and empty states
   if (!items.length) return null;
 
+  // Show a loading spinner while fetching recommendations
   if (isLoading) {
     return (
       <div className="mt-8 border-t border-gray-100 pt-6 flex justify-center">
@@ -48,10 +51,11 @@ const CheckoutRecommendations = () => {
     );
   }
 
-  // 3. Filter the results
+  // Filter the results
   // Get an array of productCodes already in the cart so we don't recommend them again
   const cartProductCodes = items.map((item) => item.productCode);
 
+  // Filter the recommendations to exclude items already in the cart and only show those with available stock, then take the top 3
   const suggestedProducts = recommendations
     ?.filter(
       (product) =>
@@ -60,6 +64,7 @@ const CheckoutRecommendations = () => {
     )
     .slice(0, 3); // Grab the top 3 in-stock items
 
+  // If there are no valid recommendations, don't render the section at all
   if (!suggestedProducts || suggestedProducts.length === 0) return null;
 
   return (

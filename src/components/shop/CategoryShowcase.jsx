@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FreeMode, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -22,7 +22,7 @@ const CategoryShowcase = ({
         <div
           className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${reverse ? "lg:flex-row-reverse" : ""}`}
         >
-          {/* 1. Category Feature Image (Left/Right side) */}
+          {/* Category Feature Image (Left/Right side) */}
           <div className="w-full lg:w-1/3 shrink-0 group relative overflow-hidden h-100 md:h-125">
             <img
               src={categoryImage}
@@ -45,7 +45,7 @@ const CategoryShowcase = ({
             </div>
           </div>
 
-          {/* 2. Horizontal Product Carousel (Right/Left side) */}
+          {/* Horizontal Product Carousel (Right/Left side) */}
           <div className="w-full lg:w-2/3 flex items-center min-w-0">
             {/* Note: min-w-0 is crucial to prevent flexbox from blowing out Swiper's width */}
             <Swiper

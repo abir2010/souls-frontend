@@ -2,6 +2,7 @@ import { CheckCircle, X, XCircle } from "lucide-react";
 import { useToastStore } from "../../store/useToastStore";
 
 const ToastContainer = () => {
+  // Access the toasts and removeToast function from the toast store
   const { toasts, removeToast } = useToastStore();
 
   return (

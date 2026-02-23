@@ -12,10 +12,13 @@ import { Link } from "react-router-dom";
 import { adminDeleteProduct, fetchProducts } from "../../api/productApi";
 
 const AdminProducts = () => {
+  // React Query Client for cache management
   const queryClient = useQueryClient();
+
+  // Local state for search term
   const [searchTerm, setSearchTerm] = useState("");
 
-  // 1. Fetch Products using your actual API function
+  // Fetch Products using your actual API function
   const {
     data: products,
     isLoading,
@@ -25,7 +28,7 @@ const AdminProducts = () => {
     queryFn: () => fetchProducts(), // No filters passed by default, fetches all
   });
 
-  // 2. Delete Mutation
+  // Delete Mutation
   const deleteMutation = useMutation({
     mutationFn: adminDeleteProduct,
     onSuccess: () => {
@@ -50,7 +53,7 @@ const AdminProducts = () => {
     }
   };
 
-  // 3. Client-Side Search Filter (Instant visual filtering)
+  // Client-Side Search Filter (Instant visual filtering)
   const filteredProducts = products?.filter((product) => {
     const searchLower = searchTerm.toLowerCase();
     return (

@@ -4,6 +4,7 @@ import AdminHeader from "../components/admin/AdminHeader";
 import AdminSidebar from "../components/admin/AdminSidebar";
 
 const AdminLayout = () => {
+  // State to manage the visibility of the sidebar on mobile devices
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (

@@ -4,9 +4,13 @@ import { adminManageProduct } from "../../api/productApi";
 import ProductForm from "../../components/admin/ProductForm";
 
 const AddProduct = () => {
+  // Get the navigate function to redirect after successful product addition
   const navigate = useNavigate();
+
+  // Get the query client to invalidate product list after adding a new product
   const queryClient = useQueryClient();
 
+  // Set up the mutation for adding a new product
   const mutation = useMutation({
     mutationFn: adminManageProduct,
     onSuccess: () => {

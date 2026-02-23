@@ -2,6 +2,7 @@ import { ArrowUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const ScrollToTopButton = () => {
+  // State to track the visibility of the button
   const [isVisible, setIsVisible] = useState(false);
 
   // Show button when page is scrolled down
@@ -13,6 +14,7 @@ const ScrollToTopButton = () => {
     }
   };
 
+  // Scroll the page to the top smoothly
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -20,11 +22,13 @@ const ScrollToTopButton = () => {
     });
   };
 
+  // Add scroll event listener on mount and clean up on unmount
   useEffect(() => {
     window.addEventListener("scroll", toggleVisibility);
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
+  // If the button is not visible, don't render it
   if (!isVisible) return null;
 
   return (

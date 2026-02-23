@@ -12,16 +12,19 @@ import { adminGetOrders, adminUpdateOrder } from "../../api/orderApi";
 import OrderDetailsModal from "../../components/admin/OrderDetailsModal";
 
 const Orders = () => {
+  // Access the QueryClient to invalidate queries after updates
   const queryClient = useQueryClient();
 
   // State for the modal
   const [selectedOrder, setSelectedOrder] = useState(null);
 
+  // Fetch orders using React Query
   const { data: orders, isLoading } = useQuery({
     queryKey: ["admin-orders"],
     queryFn: adminGetOrders,
   });
 
+  // Mutation for updating order status or details
   const updateMutation = useMutation({
     mutationFn: adminUpdateOrder,
     onSuccess: () => {
@@ -40,6 +43,7 @@ const Orders = () => {
     updateMutation.mutate({ orderId, ...updateData });
   };
 
+  // Function to get status styles based on order status
   const getStatusStyle = (status) => {
     switch (status) {
       case "Pending":
@@ -57,6 +61,7 @@ const Orders = () => {
     }
   };
 
+  // Show loader while fetching orders
   if (isLoading)
     return (
       <div className="h-96 flex items-center justify-center">

@@ -1,7 +1,7 @@
 const VideoSection = () => {
   return (
     <section className="relative w-full h-[60vh] md:h-[80vh] overflow-hidden bg-brand-primary">
-      {/* 1. HTML5 Video Background */}
+      {/* HTML5 Video Background */}
       <video
         autoPlay
         muted
@@ -17,10 +17,10 @@ const VideoSection = () => {
         Your browser does not support the video tag.
       </video>
 
-      {/* 2. Dark Overlay for Text Readability */}
+      {/* Dark Overlay for Text Readability */}
       <div className="absolute inset-0 bg-black/40" />
 
-      {/* 3. Text Overlay */}
+      {/* Text Overlay */}
       <div className="relative h-full container mx-auto px-4 flex flex-col justify-center items-center text-center z-10">
         <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6 drop-shadow-lg tracking-tight">
           Crafted for the <span className="text-brand-accent">Modern Era</span>.
