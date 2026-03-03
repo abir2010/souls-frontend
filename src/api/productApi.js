@@ -39,9 +39,9 @@ export const adminManageProduct = async (productData) => {
 
 /**
  * Admin: Delete a product
- * Hits the DELETE /api/admin/products/:id route
+ * Hits the DELETE /api/products/:id route
  */
 export const adminDeleteProduct = async (id) => {
-  const response = await axiosInstance.delete(`/admin/products/${id}`);
+  const response = await axiosInstance.delete(`/products/${id}`);
   return response.data;
 };

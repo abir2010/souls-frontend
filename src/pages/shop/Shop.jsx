@@ -99,7 +99,6 @@ const Shop = () => {
     }
 
     result = result.filter((p) => p.finalPrice <= priceRange);
-    console.log(result);
 
     switch (sortBy) {
       case "price_asc":
