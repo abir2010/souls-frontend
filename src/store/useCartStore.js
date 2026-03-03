@@ -98,9 +98,11 @@ export const useCartStore = create(
       // Helper to calculate totals instantly anywhere in the app
       getCartTotal: () => {
         const { items, discountConfig } = get();
-        const subTotal = items.reduce(
-          (total, item) => total + item.finalPrice * item.quantity,
-          0,
+        const subTotal = Math.round(
+          items.reduce(
+            (total, item) => total + item.finalPrice * item.quantity,
+            0,
+          ),
         );
 
         // x% discount if subtotal is >= ৳y
@@ -109,7 +111,7 @@ export const useCartStore = create(
             ? Math.round(subTotal * (discountConfig.percentage / 100))
             : 0;
 
-        const total = subTotal - discount;
+        const total = Math.round(subTotal - discount);
 
         return { subTotal, discount, total };
       },

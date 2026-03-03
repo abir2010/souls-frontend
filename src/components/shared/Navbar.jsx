@@ -7,6 +7,18 @@ const Navbar = () => {
   // State to manage mobile menu visibility
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Category list with the exact URL paths
+  const shopCategories = [
+    { name: "All Collection", path: "/shop" },
+    { name: "Panjabi", path: "/shop?category=Panjabi" },
+    { name: "Pajama", path: "/shop?category=Pajama" },
+    { name: "Shirt", path: "/shop?category=Shirt" },
+    { name: "T-Shirt", path: "/shop?category=T-Shirt" },
+    { name: "Pant", path: "/shop?category=Pant" },
+    { name: "Polo T-Shirt", path: "/shop?category=Polo T-Shirt" },
+    { name: "Drop Shoulder", path: "/shop?category=Drop Shoulder" },
+  ];
+
   // Calculate total items in cart for the badge
   const cartItems = useCartStore((state) => state.items);
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -154,6 +166,20 @@ const Navbar = () => {
           >
             Shop
           </NavLink>
+          <div className="grid transition-all duration-300 ease-in-out grid-rows-[1fr] opacity-100 mt-2">
+            <div className="overflow-hidden flex flex-col pl-4 space-y-3 border-l-2 border-brand-primary/20">
+              {shopCategories.map((category) => (
+                <Link
+                  key={category.name}
+                  to={category.path}
+                  onClick={closeMenu}
+                  className="text-sm font-medium text-gray-500 hover:text-brand-primary transition-colors"
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          </div>
           <NavLink
             to="/location"
             onClick={closeMenu}

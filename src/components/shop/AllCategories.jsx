@@ -104,6 +104,23 @@ const AllCategories = () => {
           ctaLink="/shop?category=T-Shirt"
           reverse={true}
         />
+
+        {/* Polo T-Shirt Section */}
+        <CategorySection
+          categoryName="Polo T-Shirts"
+          apiCategory="Polo T-Shirt"
+          categoryImage="https://images.unsplash.com/photo-1671438118097-479e63198629?w=800&q=80"
+          ctaLink="/shop?category=Polo T-Shirt"
+        />
+
+        {/* Drop Shoulder Section */}
+        <CategorySection
+          categoryName="Drop Shoulder Tees"
+          apiCategory="Drop Shoulder"
+          categoryImage="https://images.unsplash.com/photo-1666358070731-f5bd1ef7d17b?w=800&q=80"
+          ctaLink="/shop?category=Drop Shoulder"
+          reverse={true}
+        />
       </div>
     </div>
   );

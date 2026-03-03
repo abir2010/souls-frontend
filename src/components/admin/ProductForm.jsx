@@ -129,10 +129,11 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
   };
 
   // Calculate final price for UI preview
-  const finalPrice =
+  const finalPrice = Math.round(
     formData.discountType === "percentage"
       ? formData.price - formData.price * (formData.discountValue / 100)
-      : formData.price - formData.discountValue;
+      : formData.price - formData.discountValue,
+  );
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8 max-w-6xl">
@@ -189,6 +190,8 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
                 <option value="Shirt">Shirt</option>
                 <option value="T-Shirt">T-Shirt</option>
                 <option value="Pant">Pant</option>
+                <option value="Polo T-Shirt">Polo T-Shirt</option>
+                <option value="Drop Shoulder">Drop Shoulder</option>
               </select>
             </div>
             <div className="space-y-1">

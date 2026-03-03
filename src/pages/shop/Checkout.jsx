@@ -47,7 +47,7 @@ const Checkout = () => {
     formData.city === "Chittagong"
       ? discountConfig.deliveryChargeInside
       : discountConfig.deliveryChargeOutside;
-  const totalAmount = subTotal + shippingCharge - discount;
+  const totalAmount = Math.round(subTotal + shippingCharge - discount);
 
   // Handle form input changes
   const handleInputChange = (e) => {

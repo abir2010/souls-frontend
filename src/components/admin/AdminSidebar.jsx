@@ -8,8 +8,11 @@ import {
   Users,
 } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const AdminSidebar = ({ isMobileOpen, closeMobileSidebar }) => {
+  const { logout } = useAuthStore();
+
   // Define navigation links with their respective icons
   const navLinks = [
     { name: "Dashboard", path: "/admin", icon: LayoutDashboard },
@@ -84,8 +87,7 @@ const AdminSidebar = ({ isMobileOpen, closeMobileSidebar }) => {
           <button
             className="flex items-center gap-3 px-4 py-3 text-red-500 hover:bg-red-50 rounded-md transition-colors w-full"
             onClick={() => {
-              // Handle Logout Logic Here Later
-              alert("Logging out...");
+              logout();
             }}
           >
             <LogOut className="w-5 h-5" />

@@ -1,12 +1,22 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { fetchProducts } from "../../api/productApi";
 import PageTransition from "../../components/shared/PageTransition";
 import FilterSidebar from "../../components/shop/FilterSidebar";
 import ProductCard from "../../components/shop/ProductCard";
 
-const categories = ["All", "Panjabi", "Shirt", "T-Shirt", "Pant"];
+const categories = [
+  "Panjabi",
+  "Pajama",
+  "Shirt",
+  "T-Shirt",
+  "Pant",
+  "Polo T-Shirt",
+  "Drop Shoulder",
+];
 const sizes = ["S", "M", "L", "XL", "32", "34"];
 const sortOptions = [
   { label: "Newest", value: "newest" },
@@ -17,12 +27,29 @@ const sortOptions = [
 const Shop = () => {
   // Mobile filter drawer state
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Filter States
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const categoryFromUrl = searchParams.get("category");
+  const [selectedCategory, setSelectedCategory] = useState(
+    categoryFromUrl || "All",
+  );
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [priceRange, setPriceRange] = useState(5000);
   const [sortBy, setSortBy] = useState("newest");
+
+  useEffect(() => {
+    setSelectedCategory(categoryFromUrl || "All");
+  }, [categoryFromUrl]);
+
+  const handleCategoryChange = (newCategory) => {
+    setSelectedCategory(newCategory);
+    if (newCategory === "All") {
+      setSearchParams({});
+    } else {
+      setSearchParams({ category: newCategory });
+    }
+  };
 
   // Toggle Size Selection
   const handleSizeToggle = (size) => {
@@ -72,6 +99,7 @@ const Shop = () => {
     }
 
     result = result.filter((p) => p.finalPrice <= priceRange);
+    console.log(result);
 
     switch (sortBy) {
       case "price_asc":
@@ -94,7 +122,7 @@ const Shop = () => {
     categories,
     sizes,
     selectedCategory,
-    setSelectedCategory,
+    setSelectedCategory: handleCategoryChange,
     selectedSizes,
     handleSizeToggle,
     priceRange,
