@@ -54,11 +54,11 @@ const Navbar = () => {
               <img
                 src="/souls-logo.jpg"
                 alt="Brand Logo"
-                className="h-18 w-auto mr-2"
+                className="h-10 lg:h-18 w-auto mr-2"
               />
               <Link
                 to="/"
-                className="font-display font-bold text-3xl tracking-tight text-brand-primary"
+                className="font-display font-bold text-2xl md:text-3xl tracking-tight text-brand-primary"
               >
                 Souls<span className="text-brand-accent">Lifestyle</span>
               </Link>
@@ -92,7 +92,7 @@ const Navbar = () => {
                 placeholder="Search..."
                 className="hidden md:block border border-gray-300 rounded-md px-3 py-1 text-md focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-colors"
               />
-              <button className="text-brand-primary hover:text-brand-accent transition-colors">
+              <button className="hidden md:block text-brand-primary hover:text-brand-accent transition-colors">
                 <Search className="h-5 w-5" />
               </button>
 
